@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | E.H Mahesh Chander Universe</title>
+    <meta name="description" content="Access the interactive universe control of E.H Mahesh Chander using hand gestures.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="brand-name">E.H Mahesh Chander</div>
+    
+    <div class="login-container">
+        <!-- Canvas for background stars -->
+        <canvas id="bg-stars"></canvas>
+
+        <div class="login-form glass-card">
+            <h1 class="login-title">Universe Access</h1>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 30px;">Authenticate to control the earth</p>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Identity" required autocomplete="off">
+                </div>
+                <div style="height: 15px;"></div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Passcode" required>
+                </div>
+                <div style="height: 30px;"></div>
+                <button type="submit" class="btn-primary">Initialize System</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Simple Star Background
+        const canvas = document.getElementById('bg-stars');
+        const ctx = canvas.getContext('2d');
+        let width, height, stars = [];
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            initStars();
+        }
+
+        function initStars() {
+            stars = [];
+            for(let i = 0; i < 200; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 2,
+                    speed: Math.random() * 0.5 + 0.1
+                });
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = '#050505';
+            ctx.fillRect(0, 0, width, height);
+            
+            ctx.fillStyle = '#ffffff';
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                star.y -= star.speed;
+                if(star.y < 0) star.y = height;
+            });
+            
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+
+        // Login Logic
+        const form = document.getElementById('loginForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = form.querySelector('button');
+            btn.innerHTML = 'Granting Access...';
+            btn.style.opacity = '0.7';
+            
+            // Artificial delay for effect
+            setTimeout(() => {
+                sessionStorage.setItem('isAuthenticated', 'true');
+                window.location.href = 'earth.html';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
